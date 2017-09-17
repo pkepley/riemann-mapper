@@ -5,6 +5,7 @@ def distribute_points_evenly(gamma, n):
 	sep_len = gamma_len / n
 	ps = np.zeros(n, dtype=np.complex64)
 	gamma_ind_ps = np.zeros(n, dtype=np.int32)
+	gamma_i_param_ps = np.zeros(n, dtype=np.float64)
 	accum_len = 0.0
 	p_j_len =  0.0
 	j = 0
@@ -17,8 +18,11 @@ def distribute_points_evenly(gamma, n):
 		while(len_along_gamma_i < gamma_i_len - .000001):
 			param_p_j = len_along_gamma_i / gamma_i_len			
 			p_j = gamma_i.point(param_p_j)
+			
+			# save point information:
 			ps[j] = p_j
-			gamma_ind_ps = i
+			gamma_i_param_ps[j] = param_p_j
+			gamma_ind_ps[j] = i
 
 			# update:
 			j = j + 1
@@ -27,18 +31,21 @@ def distribute_points_evenly(gamma, n):
 
 		accum_len = accum_len + gamma_i_len
 
-	return ps, gamma_ind_ps
+	return ps, gamma_ind_ps, gamma_i_param_ps
 
 
 if __name__ == '__main__':
 	from svgpathtools import svg2paths, disvg, path
 	import matplotlib.pyplot as plt
-	# paths, attrs = svg2paths('../imgs/indiana_map.svg')
-	paths, attrs = svg2paths('../imgs/circle.svg')
+	paths, attrs = svg2paths('../imgs/indiana_map.svg')
+	#paths, attrs = svg2paths('../imgs/circle.svg')
 
+	# Distribute n points around a piece-wise continuous path
 	gamma = paths[0]
-	n = 200
-	(ps, gamma_ind_ps) = distribute_points_evenly(gamma, n)
+	n = 100
+	(ps, gamma_ind_ps, gamma_i_param_ps) = distribute_points_evenly(gamma, n)
+
+	# Plot
 	xs = ps.real
 	ys = -ps.imag
 	plt.scatter(xs,ys)
