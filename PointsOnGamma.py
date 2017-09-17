@@ -10,6 +10,7 @@ class  PointsOnGamma:
 		self.ps_seg_param = np.zeros(self.n_ps, dtype=np.float64)
 		self.ps_tangent = np.zeros(self.n_ps, dtype=np.complex64)
 		self.ps_unit_tangent = np.zeros(self.n_ps, dtype=np.complex64)
+		self.ps_seg_len = np.zeros(self.n_ps, dtype=np.float64)
 
 		# For now, this is the only option to distribute points
 		self.distribute_points_evenly()
@@ -26,6 +27,7 @@ class  PointsOnGamma:
 			
 			# this is a hack
 			while(len_along_gamma_i < gamma_i_len - .000001):
+				self.ps_seg_len[j] = sep_len
 				param_p_j = len_along_gamma_i / gamma_i_len			
 				p_j = gamma_i.point(param_p_j)
 				
