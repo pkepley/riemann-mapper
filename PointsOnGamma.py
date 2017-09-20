@@ -44,6 +44,29 @@ class  PointsOnGamma:
 				len_along_gamma_i = len_along_gamma_i + sep_len
 				
 			accum_len = accum_len + gamma_i_len
+
+	# Lazy, not ready for prime-time, but I think we should 
+	# have the cauchy integral as a special case of a more general
+	# path integral
+	# def path_integral(self, fs):
+	# 	dz = self.ps_unit_tangent.flatten() * self.ps_seg_len.flatten()
+	# 	df = fs.flatten() * dz
+	# 	df = df.reshape((1, self.n_ps))
+	# 	return (np.dot(df, cauchy_term) / (2.0 * np.pi * 1.0j))
+
+	def cauchy_integral(self, fs, z0):
+		""" 
+		   fs needs to should be a row or column vector, sampled at the points ps
+		   z0 should be a column vector, or a matrix of column vectors
+		"""
+		# fs is the function to be integrated
+		zs = self.ps.reshape((self.n_ps, 1))		
+		cauchy_term = 1.0 / (zs - z0)		
+		dz = self.ps_unit_tangent.flatten() * self.ps_seg_len.flatten()		
+		df = fs.flatten() * dz
+		df = df.reshape((1, self.n_ps))
+		return (np.dot(df, cauchy_term) / (2.0 * np.pi * 1.0j))
+		
 		
 # Demo:
 if __name__ == '__main__':
@@ -54,14 +77,20 @@ if __name__ == '__main__':
 
 	# Distribute n points around a piece-wise continuous path
 	gamma = paths[0]
-	n = 100
+	n = 2000
 
 	pog = PointsOnGamma(gamma, n)
 	ps = pog.ps
+	xs = ps.real
+	ys = ps.imag
 
+	a = np.mean(ps)
+	print abs(np.array([a, a+1]) - pog.cauchy_integral(ps, np.array([a, a+1])))
+	
 	# Plot
 	xs = ps.real
-	ys = -ps.imag
+	ys = ps.imag
 	plt.scatter(xs,ys)
 	plt.axis('equal')
 	plt.show()
+
