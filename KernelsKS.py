@@ -1,6 +1,6 @@
 import numpy as np
 
-class ProblemKS:
+class KernelsKS:
 	def __init__(self, a, points_on_gamma):
 		# a must be inside of gamma, we should add error checking!
 		self.points_on_gamma = points_on_gamma
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
 	# not guaranteed to fall inside of gamma, but set a the mean of gamma
 	a = np.mean(xs) + np.mean(ys) * (1.0j)		
-	kks = ProblemKS(a, pog)	
+	kks = KernelsKS(a, pog)	
 	kks.solve_ks()
 
 	if debug_plots:		
