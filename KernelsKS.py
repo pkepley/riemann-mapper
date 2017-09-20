@@ -61,9 +61,21 @@ class ProblemKS:
 
 		self.A = (1.0/(2.0*np.pi*1.0j)) *  (A1 - A2)	
 
-		self.K = ((np.diag(abs_z_prime_s.flatten()) * self.A) * 
-				  np.diag(abs_w_prime_s.flatten()))
+		self.K = np.dot(np.diag(abs_z_prime_s.flatten()),  self.A) 
+		self.K = np.dot(self.K, np.diag(abs_w_prime_s.flatten()))
 		
+	def solve_ks(self):
+		self.M = np.dot(self.K, np.diag(self.points_on_gamma.ps_seg_len.flatten()))
+		np.fill_diagonal(self.M, 1.0 - np.diag(self.M))
+ 		self.sigma = np.linalg.solve(self.M, self.c)
+
+		# Obtain the Szego kernel
+		self.S_a = self.sigma.flatten() / np.sqrt(abs(self.z_prime_s.flatten()))
+		self.S_a = self.S_a.reshape((self.n_zs, 1))
+
+		# Obtain the bv of the Garabedian Kernel
+		self.L_a = (1.0j) * (self.S_a.flatten() * self.Ts.flatten()).conjugate()
+		self.L_a = self.L_a.reshape((self.n_zs, 1))
 
 
 if __name__ == '__main__':
@@ -72,10 +84,11 @@ if __name__ == '__main__':
 	import matplotlib.pyplot as plt
 	paths, attrs = svg2paths('./imgs/indiana_map.svg')
 	#paths, attrs = svg2paths('./imgs/circle2.svg')
+	debug_plots = True
 
 	# Distribute n points around a piece-wise continuous path
 	gamma = paths[0]
-	n = 2000
+	n = 200
 
 	pog = PointsOnGamma(gamma, n)
 	ps = pog.ps
@@ -84,13 +97,22 @@ if __name__ == '__main__':
 
 	# not guaranteed to fall inside of gamma, but set a the mean of gamma
 	a = np.mean(xs) + np.mean(ys) * (1.0j)		
-	kks = ProblemKS(a, pog)
+	kks = ProblemKS(a, pog)	
+	kks.solve_ks()
 
-	plt.figure()
-	plt.plot(abs(kks.c))
-	plt.plot(abs(kks.C_a))
+	if debug_plots:		
+		plt.figure()
+		plt.plot(abs(kks.c))
+		plt.plot(abs(kks.C_a))
 
-	plt.figure()
-	plt.imshow(abs(kks.A), interpolation='nearest')
-	plt.colorbar()
-	plt.show()
+		plt.figure()
+		plt.plot(abs(kks.sigma))
+		plt.plot(abs(kks.S_a))
+
+		plt.figure()
+		plt.plot(abs(kks.L_a))
+				
+		plt.figure()
+		plt.imshow(abs(kks.A), interpolation='nearest')
+		plt.colorbar()
+		plt.show()
