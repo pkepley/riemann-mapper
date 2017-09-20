@@ -72,8 +72,8 @@ class  PointsOnGamma:
 if __name__ == '__main__':
 	from svgpathtools import svg2paths, disvg, path
 	import matplotlib.pyplot as plt
-	paths, attrs = svg2paths('./imgs/indiana_map.svg')
-	#paths, attrs = svg2paths('./imgs/circle.svg')
+	#paths, attrs = svg2paths('./imgs/indiana_map.svg')
+	paths, attrs = svg2paths('./imgs/circle.svg')
 
 	# Distribute n points around a piece-wise continuous path
 	gamma = paths[0]
@@ -84,8 +84,12 @@ if __name__ == '__main__':
 	xs = ps.real
 	ys = ps.imag
 
-	a = np.mean(ps)
-	print abs(np.array([a, a+1]) - pog.cauchy_integral(ps, np.array([a, a+1])))
+
+	c = np.mean(ps)
+	v = 0.5 * (ps[0] - c)
+	print np.array([c, c+v])
+	print pog.cauchy_integral(ps, np.array([c, c+v]))
+
 	
 	# Plot
 	xs = ps.real
