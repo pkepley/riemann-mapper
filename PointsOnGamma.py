@@ -4,7 +4,7 @@ class  PointsOnGamma:
 	def __init__(self, gamma, n_ps):
 		self.gamma = gamma
 		self.n_ps = n_ps
-		self.gamma_len = self.gamma.length()
+		self.gamma_length = self.gamma.length()
 		self.ps = np.zeros(self.n_ps, dtype=np.complex64)
 		self.ps_seg_ind = np.zeros(self.n_ps, dtype=np.int32)
 		self.ps_seg_param = np.zeros(self.n_ps, dtype=np.float64)
@@ -16,7 +16,7 @@ class  PointsOnGamma:
 		self.distribute_points_evenly()
 
 	def distribute_points_evenly(self):		
-		sep_len = self.gamma_len / self.n_ps
+		sep_len = self.gamma_length / self.n_ps
 		accum_len = 0.0
 		p_j_len =  0.0
 		j = 0
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 	from svgpathtools import svg2paths, disvg, path
 	import matplotlib.pyplot as plt
 	#paths, attrs = svg2paths('./imgs/indiana_map.svg')
-	paths, attrs = svg2paths('./imgs/circle.svg')
+	paths, attrs = svg2paths('./imgs/test.svg')
 
 	# Distribute n points around a piece-wise continuous path
 	gamma = paths[0]
