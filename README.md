@@ -27,3 +27,15 @@ computing integrals. Moreover, I would like to add a method to
 approximate the inverse of the Riemann map, so that I can map from the
 disk onto a given domain. In particular, I'd like to be able to map
 Indiana onto a potato shaped domain.
+
+## An example 
+
+Here's a map of Indiana into the unit disc. Note that there are points
+from inside indiana that do not fall inside the disk. This shouldn't
+happen, and suggests that this implementation has a good amount of
+room for improvement. (n = 5000 points are used on the domain
+boundary)
+
+<div
+<img src="./imgs/indianaSource.png" width=400px>
+<img src="./imgs/indianaTarget.png" width=400px>
