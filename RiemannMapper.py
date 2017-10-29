@@ -25,7 +25,7 @@ class RiemannMapper:
 
 	def evaluate_garabedian(self, ws):
 		m = (1.0/(2.0*np.pi))
-		I1 = m / (ws - a)
+		I1 = m / (ws - self.a)
 		I2 = self.points_on_gamma.cauchy_integral(self.L_a - m / (self.zs - self.a), ws)
 		return I1 + I2
 
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 		rm = RiemannMapper(kks)
 		print a, rm.evaluate_riemann(a+.001)
 		
-		for i in range(0,290,5):
+		for i in range(0,200,5):
 			ws = a + ((i+1) / 300.0) * (ps - a)
 			zz = rm.evaluate_riemann(ws)
 			
