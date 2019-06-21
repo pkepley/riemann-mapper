@@ -31,7 +31,7 @@ Indiana onto a potato shaped domain.
 ## An example 
 
 Here's a map of Indiana into the unit disc. Note that there are points
-from inside indiana that do not fall inside the disk. This shouldn't
+from inside Indiana that do not fall inside the disk. This shouldn't
 happen, and suggests that this implementation has a good amount of
 room for improvement. (n = 5000 points are used on the domain
 boundary)
